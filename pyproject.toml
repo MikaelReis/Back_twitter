@@ -1,9 +1,11 @@
 [tool.poetry]
-name = "twitter-back"
+name = "Twitter_back"
 version = "0.1.0"
 description = "Twitter Api"
-authors = ["Vitor Brito <joaovitor16611661@gmail.com>"]
-readme = "README.md"
+authors = ["MikaelReis <mikaelreis08@gmail.com>"]
+packages = [
+    { include = "Twitter_back" } 
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
