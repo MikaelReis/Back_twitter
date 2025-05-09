@@ -1,0 +1,41 @@
+name: Python CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.8", "3.9"]
+        os: [ubuntu-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'poetry'
+
+    - name: Install Poetry
+      run: pipx install poetry
+
+    - name: Configure Poetry
+      run: |
+        poetry config virtualenvs.create true
+        poetry config virtualenvs.in-project true
+
+    - name: Install dependencies
+      run: |
+        poetry install --no-interaction --no-root
+        poetry install --only main,test
+
+    - name: Run tests
+      run: poetry run pytest
+
+    - name: Run migrations (optional)
+      run: poetry run python manage.py migrate
